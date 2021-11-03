@@ -81,12 +81,28 @@ const App = () => {
     }
   };
 
+  const moveIntoSquareBelow = () => {
+    for (let i = 0; i < width * width - width; i++) {
+      const isFirstRow = i < width;
+
+      if (isFirstRow && currentColorArrangement[i] === "") {
+        currentColorArrangement[i] = getRandomColor();
+      }
+
+      if (currentColorArrangement[i + width] === "") {
+        currentColorArrangement[i + width] = currentColorArrangement[i];
+        currentColorArrangement[i] = "";
+      }
+    }
+  };
+
   useEffect(() => {
     const timer = setInterval(() => {
       checkForColumnOfFour();
       checkForRowOfFour();
       checkForColumnOfThree();
       checkForRowOfThree();
+      moveIntoSquareBelow();
       setCurrentColorArrangement([...currentColorArrangement]);
     }, 100);
     return () => {
@@ -97,6 +113,7 @@ const App = () => {
     checkForColumnOfFour,
     checkForRowOfThree,
     checkForRowOfFour,
+    moveIntoSquareBelow,
     currentColorArrangement,
   ]);
 
