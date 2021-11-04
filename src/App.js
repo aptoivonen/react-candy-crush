@@ -7,6 +7,7 @@ import purpleCandy from "./images/purple-candy.png";
 import redCandy from "./images/red-candy.png";
 import yellowCandy from "./images/yellow-candy.png";
 import blank from "./images/blank.png";
+import ScoreBoard from "./components/ScoreBoard";
 
 const width = 8;
 const candyColors = [
@@ -25,6 +26,7 @@ const setPositionEmpty = (colorArrangement, index) => {
   colorArrangement[index] = blank;
 };
 const getRandomColor = () => sample(candyColors);
+const isBlank = (color) => color === blank;
 
 const createBoard = () => new Array(width * width).fill().map(getRandomColor);
 
@@ -34,6 +36,7 @@ const App = () => {
   );
   const [squareBeingDragged, setSquareBeingDragged] = useState(null);
   const [squareBeingReplaced, setSquareBeingReplaced] = useState(null);
+  const [scoreDisplay, setScoreDisplay] = useState(0);
 
   const checkForColumnOfThree = () => {
     for (let i = 0; i <= 47; i++) {
@@ -41,12 +44,15 @@ const App = () => {
       const decidedColor = currentColorArrangement[i];
       if (
         columnOfThree.every(
-          (square) => currentColorArrangement[square] === decidedColor
+          (square) =>
+            currentColorArrangement[square] === decidedColor &&
+            !isBlank(decidedColor)
         )
       ) {
         columnOfThree.forEach((square) =>
           setPositionEmpty(currentColorArrangement, square)
         );
+        setScoreDisplay((score) => score + 3);
         return true;
       }
     }
@@ -58,12 +64,16 @@ const App = () => {
       const decidedColor = currentColorArrangement[i];
       if (
         columnOfFour.every(
-          (square) => currentColorArrangement[square] === decidedColor
+          (square) =>
+            currentColorArrangement[square] === decidedColor &&
+            !isBlank(decidedColor)
         )
       ) {
         columnOfFour.forEach((square) =>
           setPositionEmpty(currentColorArrangement, square)
         );
+        setScoreDisplay((score) => score + 4);
+
         return true;
       }
     }
@@ -78,12 +88,16 @@ const App = () => {
       const decidedColor = currentColorArrangement[i];
       if (
         rowOfThree.every(
-          (square) => currentColorArrangement[square] === decidedColor
+          (square) =>
+            currentColorArrangement[square] === decidedColor &&
+            !isBlank(decidedColor)
         )
       ) {
         rowOfThree.forEach((square) =>
           setPositionEmpty(currentColorArrangement, square)
         );
+        setScoreDisplay((score) => score + 3);
+
         return true;
       }
     }
@@ -98,12 +112,16 @@ const App = () => {
       const decidedColor = currentColorArrangement[i];
       if (
         rowOfFour.every(
-          (square) => currentColorArrangement[square] === decidedColor
+          (square) =>
+            currentColorArrangement[square] === decidedColor &&
+            !isBlank(decidedColor)
         )
       ) {
         rowOfFour.forEach((square) =>
           setPositionEmpty(currentColorArrangement, square)
         );
+        setScoreDisplay((score) => score + 4);
+
         return true;
       }
     }
@@ -220,6 +238,7 @@ const App = () => {
           />
         ))}
       </div>
+      <ScoreBoard score={scoreDisplay} />
     </div>
   );
 };
