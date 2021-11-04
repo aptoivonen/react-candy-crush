@@ -1,9 +1,10 @@
 import { memo } from "react";
 import PropTypes from "prop-types";
+import "./ScoreBoard.css";
 
 const ScoreBoard = ({ score }) => {
   return (
-    <div className="score-board">
+    <div>
       <p className="score-display">{score}</p>
     </div>
   );
