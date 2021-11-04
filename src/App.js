@@ -18,6 +18,8 @@ const App = () => {
   const [currentColorArrangement, setCurrentColorArrangement] = useState(() =>
     createBoard()
   );
+  const [squareBeingDragged, setSquareBeingDragged] = useState(null);
+  const [squareBeingReplaced, setSquareBeingReplaced] = useState(null);
 
   const checkForColumnOfThree = () => {
     for (let i = 0; i <= 47; i++) {
@@ -31,6 +33,7 @@ const App = () => {
         columnOfThree.forEach((square) =>
           setPositionEmpty(currentColorArrangement, square)
         );
+        return true;
       }
     }
   };
@@ -47,6 +50,7 @@ const App = () => {
         columnOfFour.forEach((square) =>
           setPositionEmpty(currentColorArrangement, square)
         );
+        return true;
       }
     }
   };
@@ -66,6 +70,7 @@ const App = () => {
         rowOfThree.forEach((square) =>
           setPositionEmpty(currentColorArrangement, square)
         );
+        return true;
       }
     }
   };
@@ -85,6 +90,7 @@ const App = () => {
         rowOfFour.forEach((square) =>
           setPositionEmpty(currentColorArrangement, square)
         );
+        return true;
       }
     }
   };
@@ -125,6 +131,62 @@ const App = () => {
     currentColorArrangement,
   ]);
 
+  const ignore = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDragStart = (e) => {
+    setSquareBeingDragged(e.target);
+  };
+
+  const handleDrop = (e) => {
+    setSquareBeingReplaced(e.target);
+  };
+
+  const handleDragEnd = (e) => {
+    const squareBeingDraggedId = parseInt(
+      squareBeingDragged.getAttribute("data-id")
+    );
+    const squareBeingReplacedId = parseInt(
+      squareBeingReplaced.getAttribute("data-id")
+    );
+
+    currentColorArrangement[squareBeingReplacedId] =
+      squareBeingDragged.style.backgroundColor;
+    currentColorArrangement[squareBeingDraggedId] =
+      squareBeingReplaced.style.backgroundColor;
+
+    const validMoves = [
+      squareBeingDraggedId - 1,
+      squareBeingDraggedId - width,
+      squareBeingDraggedId + 1,
+      squareBeingDraggedId + width,
+    ];
+    const validMove = validMoves.includes(squareBeingReplacedId);
+
+    const isAColumnOfFour = checkForColumnOfFour();
+    const isARowOfFour = checkForRowOfFour();
+    const isAColumnOfThree = checkForColumnOfThree();
+    const isARowOfThree = checkForRowOfThree();
+    const squareBeingReplacedIdExists =
+      typeof squareBeingReplacedId === "number";
+
+    if (
+      squareBeingReplacedIdExists &&
+      validMove &&
+      (isAColumnOfFour || isARowOfFour || isAColumnOfThree || isARowOfThree)
+    ) {
+      setSquareBeingDragged(null);
+      setSquareBeingReplaced(null);
+    } else {
+      currentColorArrangement[squareBeingReplacedId] =
+        squareBeingReplaced.style.backgroundColor;
+      currentColorArrangement[squareBeingDraggedId] =
+        squareBeingDragged.style.backgroundColor;
+      setCurrentColorArrangement([...currentColorArrangement]);
+    }
+  };
+
   return (
     <div className="app">
       <div className="game">
@@ -133,6 +195,14 @@ const App = () => {
             key={index}
             style={{ backgroundColor: candyColor }}
             alt={candyColor}
+            data-id={index}
+            draggable={true}
+            onDragStart={handleDragStart}
+            onDrop={handleDrop}
+            onDragEnd={handleDragEnd}
+            onDragOver={ignore}
+            onDragEnter={ignore}
+            onDragLeave={ignore}
           />
         ))}
       </div>
