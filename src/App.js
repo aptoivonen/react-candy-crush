@@ -20,7 +20,7 @@ const App = () => {
   );
 
   const checkForColumnOfThree = () => {
-    for (let i = 0; i < 47; i++) {
+    for (let i = 0; i <= 47; i++) {
       const columnOfThree = [i, i + width, i + width * 2];
       const decidedColor = currentColorArrangement[i];
       if (
@@ -36,7 +36,7 @@ const App = () => {
   };
 
   const checkForColumnOfFour = () => {
-    for (let i = 0; i < 39; i++) {
+    for (let i = 0; i <= 39; i++) {
       const columnOfFour = [i, i + width, i + width * 2, i + width * 3];
       const decidedColor = currentColorArrangement[i];
       if (
@@ -90,7 +90,7 @@ const App = () => {
   };
 
   const moveIntoSquareBelow = () => {
-    for (let i = 0; i < width * width - width; i++) {
+    for (let i = 0; i <= width * width - width; i++) {
       const isOnFirstRow = i < width;
 
       if (isOnFirstRow && isEmpty(currentColorArrangement, i)) {
