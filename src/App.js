@@ -6,6 +6,10 @@ const candyColors = ["blue", "green", "orange", "purple", "red", "yellow"];
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
+const isEmpty = (colorArrangement, index) => colorArrangement[index] === "";
+const setPositionEmpty = (colorArrangement, index) => {
+  colorArrangement[index] = "";
+};
 const getRandomColor = () => sample(candyColors);
 
 const createBoard = () => new Array(width * width).fill().map(getRandomColor);
@@ -24,8 +28,8 @@ const App = () => {
           (square) => currentColorArrangement[square] === decidedColor
         )
       ) {
-        columnOfThree.forEach(
-          (square) => (currentColorArrangement[square] = "")
+        columnOfThree.forEach((square) =>
+          setPositionEmpty(currentColorArrangement, square)
         );
       }
     }
@@ -40,8 +44,8 @@ const App = () => {
           (square) => currentColorArrangement[square] === decidedColor
         )
       ) {
-        columnOfFour.forEach(
-          (square) => (currentColorArrangement[square] = "")
+        columnOfFour.forEach((square) =>
+          setPositionEmpty(currentColorArrangement, square)
         );
       }
     }
@@ -59,7 +63,9 @@ const App = () => {
           (square) => currentColorArrangement[square] === decidedColor
         )
       ) {
-        rowOfThree.forEach((square) => (currentColorArrangement[square] = ""));
+        rowOfThree.forEach((square) =>
+          setPositionEmpty(currentColorArrangement, square)
+        );
       }
     }
   };
@@ -76,22 +82,24 @@ const App = () => {
           (square) => currentColorArrangement[square] === decidedColor
         )
       ) {
-        rowOfFour.forEach((square) => (currentColorArrangement[square] = ""));
+        rowOfFour.forEach((square) =>
+          setPositionEmpty(currentColorArrangement, square)
+        );
       }
     }
   };
 
   const moveIntoSquareBelow = () => {
     for (let i = 0; i < width * width - width; i++) {
-      const isFirstRow = i < width;
+      const isOnFirstRow = i < width;
 
-      if (isFirstRow && currentColorArrangement[i] === "") {
+      if (isOnFirstRow && isEmpty(currentColorArrangement, i)) {
         currentColorArrangement[i] = getRandomColor();
       }
 
-      if (currentColorArrangement[i + width] === "") {
+      if (isEmpty(currentColorArrangement, i + width)) {
         currentColorArrangement[i + width] = currentColorArrangement[i];
-        currentColorArrangement[i] = "";
+        setPositionEmpty(currentColorArrangement, i);
       }
     }
   };
