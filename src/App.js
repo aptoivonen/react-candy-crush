@@ -1,14 +1,28 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import blueCandy from "./images/blue-candy.png";
+import greenCandy from "./images/green-candy.png";
+import orangeCandy from "./images/orange-candy.png";
+import purpleCandy from "./images/purple-candy.png";
+import redCandy from "./images/red-candy.png";
+import yellowCandy from "./images/yellow-candy.png";
+import blank from "./images/blank.png";
 
 const width = 8;
-const candyColors = ["blue", "green", "orange", "purple", "red", "yellow"];
+const candyColors = [
+  blueCandy,
+  greenCandy,
+  orangeCandy,
+  purpleCandy,
+  redCandy,
+  yellowCandy,
+];
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
-const isEmpty = (colorArrangement, index) => colorArrangement[index] === "";
+const isEmpty = (colorArrangement, index) => colorArrangement[index] === blank;
 const setPositionEmpty = (colorArrangement, index) => {
-  colorArrangement[index] = "";
+  colorArrangement[index] = blank;
 };
 const getRandomColor = () => sample(candyColors);
 
@@ -152,9 +166,9 @@ const App = () => {
     );
 
     currentColorArrangement[squareBeingReplacedId] =
-      squareBeingDragged.style.backgroundColor;
+      squareBeingDragged.getAttribute("src");
     currentColorArrangement[squareBeingDraggedId] =
-      squareBeingReplaced.style.backgroundColor;
+      squareBeingReplaced.getAttribute("src");
 
     const validMoves = [
       squareBeingDraggedId - 1,
@@ -180,9 +194,9 @@ const App = () => {
       setSquareBeingReplaced(null);
     } else {
       currentColorArrangement[squareBeingReplacedId] =
-        squareBeingReplaced.style.backgroundColor;
+        squareBeingReplaced.getAttribute("src");
       currentColorArrangement[squareBeingDraggedId] =
-        squareBeingDragged.style.backgroundColor;
+        squareBeingDragged.getAttribute("src");
       setCurrentColorArrangement([...currentColorArrangement]);
     }
   };
@@ -193,7 +207,7 @@ const App = () => {
         {currentColorArrangement.map((candyColor, index) => (
           <img
             key={index}
-            style={{ backgroundColor: candyColor }}
+            src={candyColor}
             alt={candyColor}
             data-id={index}
             draggable={true}
